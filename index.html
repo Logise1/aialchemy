@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai Alchemy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="auth-container">
+        <!-- Trigger Button -->
+        <button id="login-trigger-btn" class="auth-btn">Iniciar Sesión</button>
+
+        <!-- Logged In State (Hidden by default) -->
+        <div id="user-display" class="user-info" style="display: none;">
+            <div class="user-avatar" id="user-avatar">?</div>
+            <span id="user-name">Usuario</span>
+            <button id="logout-btn" class="auth-btn small">Salir</button>
+        </div>
+    </div>
+
+    <!-- Main Menu Overlay -->
+    <div id="main-menu" class="main-menu">
+        <div class="menu-content">
+            <h1 class="game-title">Ai Alchemy</h1>
+            <div class="menu-buttons">
+                <button id="mode-sandbox-btn" class="menu-btn primary">
+                    <span class="btn-icon">✨</span> Modo Libre
+                </button>
+                <div class="divider"></div>
+                <button id="mode-levels-btn" class="menu-btn secondary">
+                    <span class="btn-icon">🏆</span> Niveles
+                </button>
+                <button id="mode-daily-btn" class="menu-btn accent">
+                    <span class="btn-icon">📅</span> Reto Diario
+                </button>
+            </div>
+
+            <div id="levels-modal" class="sub-menu hidden">
+                <h3>Selecciona un Nivel</h3>
+                <div id="levels-grid" class="levels-grid">
+                    <!-- Levels injected here -->
+                </div>
+                <div class="pagination-controls">
+                    <button id="prev-page-btn" class="nav-btn">&lt;</button>
+                    <span id="page-indicator">1 / 5</span>
+                    <button id="next-page-btn" class="nav-btn">&gt;</button>
+                </div>
+                <button id="back-to-menu-btn" class="text-btn">Volver</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+
+        <div class="workspace" id="workspace">
+            <div id="challenge-bar" class="challenge-bar" style="display: none;">
+                <div class="challenge-info">
+                    <span class="challenge-label">OBJETIVO:</span>
+                    <span id="challenge-target" class="challenge-target">???</span>
+                </div>
+                <button id="exit-challenge-btn" class="small-btn">Salir</button>
+            </div>
+            <div class="workspace-background-text">Ai Alchemy</div>
+            <button id="clear-btn" class="secondary-btn">Limpiar</button>
+            <button id="reset-btn" class="secondary-btn">Reiniciar</button>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Elementos</h2>
+                <input type="text" id="search-bar" placeholder="Buscar..." autocomplete="off" name="search-query">
+            </div>
+            <div class="inventory" id="inventory">
+                <!-- Elements will be injected here -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Login Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal" class="close-btn">&times;</span>
+            <h2>Bienvenido a Ai Alchemy</h2>
+            <p>Ingresa tu usuario para guardar tu progreso.</p>
+
+            <div class="auth-form-column">
+                <input type="text" id="username-input" placeholder="Nombre de Usuario" class="auth-input full-width">
+                <input type="password" id="password-input" placeholder="Contraseña" class="auth-input full-width">
+
+                <div class="auth-actions">
+                    <button id="login-btn" class="auth-btn full-width">Entrar</button>
+                    <button id="register-btn" class="auth-btn secondary full-width">Crear Cuenta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast-container"></div>
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
