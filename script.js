@@ -229,9 +229,13 @@ function init() {
 }
 
 function setupMenuListeners() {
-    modeSandboxBtn.addEventListener('click', () => startGame('sandbox'));
+    modeSandboxBtn.addEventListener('click', () => {
+        playSound('instance');
+        startGame('sandbox');
+    });
 
     modeLevelsBtn.addEventListener('click', () => {
+        playSound('instance');
         menuButtons.classList.add('hidden');
         levelsModal.classList.add('active');
         currentLevelPage = 0;
@@ -239,13 +243,16 @@ function setupMenuListeners() {
     });
 
     backToMenuBtn.addEventListener('click', () => {
+        playSound('instance');
         menuButtons.classList.remove('hidden');
         levelsModal.classList.remove('active');
     });
 
     if (prevPageBtn) {
         prevPageBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(levels.length / LEVELS_PER_PAGE);
             if (currentLevelPage > 0) {
+                playSound('instance');
                 currentLevelPage--;
                 renderLevelsGrid();
             }
@@ -256,6 +263,7 @@ function setupMenuListeners() {
         nextPageBtn.addEventListener('click', () => {
             const totalPages = Math.ceil(levels.length / LEVELS_PER_PAGE);
             if (currentLevelPage < totalPages - 1) {
+                playSound('instance');
                 currentLevelPage++;
                 renderLevelsGrid();
             }
@@ -263,11 +271,15 @@ function setupMenuListeners() {
     }
 
     modeDailyBtn.addEventListener('click', () => {
+        playSound('instance');
         const daily = getDailyChallenge();
         startGame('daily', daily);
     });
 
-    exitChallengeBtn.addEventListener('click', showMainMenu);
+    exitChallengeBtn.addEventListener('click', () => {
+        playSound('instance');
+        showMainMenu();
+    });
 }
 
 function renderLevelsGrid() {
@@ -291,7 +303,10 @@ function renderLevelsGrid() {
         btn.textContent = isLocked ? '🔒' : (isCompleted ? `✅ ${level.id}` : level.id);
 
         if (!isLocked) {
-            btn.addEventListener('click', () => startGame('level', level));
+            btn.addEventListener('click', () => {
+                playSound('instance');
+                startGame('level', level);
+            });
         }
         levelsGrid.appendChild(btn);
     });
@@ -338,6 +353,7 @@ function setupAuthListeners() {
     // Modal Logic
     if (loginTriggerBtn) {
         loginTriggerBtn.addEventListener('click', () => {
+            playSound('instance');
             if (authModal) {
                 authModal.style.display = 'flex';
                 if (usernameInput) usernameInput.focus();
@@ -347,6 +363,7 @@ function setupAuthListeners() {
 
     if (closeModal) {
         closeModal.addEventListener('click', () => {
+            playSound('instance');
             if (authModal) authModal.style.display = 'none';
         });
     }
@@ -360,6 +377,7 @@ function setupAuthListeners() {
     // Login Action
     if (loginBtn) {
         loginBtn.addEventListener('click', async () => {
+            playSound('instance');
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
 
@@ -382,6 +400,7 @@ function setupAuthListeners() {
     // Register Action
     if (registerBtn) {
         registerBtn.addEventListener('click', async () => {
+            playSound('instance');
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
 
@@ -417,6 +436,7 @@ function setupAuthListeners() {
     // Logout Action
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
+            playSound('instance');
             signOut(auth).then(() => {
                 showToast("Sesión cerrada");
                 inventory = new Set([...startingElements]);
@@ -483,17 +503,22 @@ async function loadUserData(user) {
             data.completedLevels.forEach(id => completedLevels.add(id));
         }
 
-        // If we are getting data while in sandbox (or init), sync visual inventory
+        // Sync visual state
         if (currentGameMode === 'sandbox') {
             inventory = new Set(persistentInventory);
             renderInventory();
         }
+
+        // Refresh levels grid if user is viewing it or to ensure state is ready
+        renderLevelsGrid();
+
         showToast(`Progreso cargado`);
     } else {
         await setDoc(userRef, {
             inventory: [...startingElements],
             emojis: {},
-            username: user.displayName || user.email.split('@')[0]
+            username: user.displayName || user.email.split('@')[0],
+            completedLevels: [] // Initialize empty
         }, { merge: true });
     }
 }
@@ -523,9 +548,15 @@ async function saveNewDiscovery(elementName, emoji) {
 async function saveLevelComplete(levelId) {
     if (!currentUser) return;
     const userRef = doc(db, "users", currentUser.uid);
-    await updateDoc(userRef, {
-        completedLevels: arrayUnion(levelId)
-    });
+    try {
+        await updateDoc(userRef, {
+            completedLevels: arrayUnion(levelId)
+        });
+        console.log(`Level ${levelId} progress saved to Firebase.`);
+    } catch (e) {
+        console.error("Error saving level progress:", e);
+        showToast("Error al guardar progreso en la nube");
+    }
 }
 
 // --- Core Game Logic ---
@@ -560,8 +591,14 @@ function setupGlobalListeners() {
         renderInventory(e.target.value);
     });
 
-    clearBtn.addEventListener('click', clearWorkspace);
-    resetBtn.addEventListener('click', resetAll);
+    clearBtn.addEventListener('click', () => {
+        playSound('instance');
+        clearWorkspace();
+    });
+    resetBtn.addEventListener('click', () => {
+        playSound('instance');
+        resetAll();
+    });
 }
 
 function startDragFromSidebar(e, name) {
@@ -637,6 +674,20 @@ function spawnElement(name, x, y) {
     el.addEventListener('mousedown', (e) => {
         e.stopPropagation();
         startDragWorkspaceElement(e, el);
+    });
+    el.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        const rect = el.getBoundingClientRect();
+        const workspaceRect = workspace.getBoundingClientRect();
+        const x = rect.left - workspaceRect.left + 20;
+        const y = rect.top - workspaceRect.top + 20;
+        const newEl = spawnElement(name, x, y);
+
+        // Slight randomness to prevent perfect stacking if clicked multiple times
+        newEl.style.left = `${x + Math.random() * 10 - 5}px`;
+        newEl.style.top = `${y + Math.random() * 10 - 5}px`;
+
+        playSound('instance');
     });
     workspace.appendChild(el);
     workspaceElements.push(el);

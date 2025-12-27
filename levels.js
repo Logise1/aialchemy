@@ -6,10 +6,10 @@ export const levels = [
     { id: 5, target: "Obsidiana", emoji: "⬛", hint: "Volcán + Agua" },
     { id: 6, target: "Polvo", emoji: "🌫️", hint: "Tierra + Viento" },
     { id: 7, target: "Humo", emoji: "🚬", hint: "Viento + Fuego" },
-    { id: 8, target: "Niebla", emoji: "🌫️", hint: "Agua + Viento -> Ola? No, intenta cosas con aire." },
+    { id: 8, target: "Niebla", emoji: "🌫️", hint: "Intenta cosas con aire y agua." },
     { id: 9, target: "Lluvia", emoji: "🌧️", hint: "Nube + Agua" },
     { id: 10, target: "Planta", emoji: "🌱", hint: "Agua + Tierra = ?" },
-    { id: 11, target: "Árbol", emoji: "🌳", hint: "Planta + ..." },
+    { id: 11, target: "Árbol", emoji: "🌳", hint: "Planta + Tierra" },
     { id: 12, target: "Bosque", emoji: "🌲", hint: "Árbol + Árbol" },
     { id: 13, target: "Lago", emoji: "🌊", hint: "Agua + Agua" },
     { id: 14, target: "Océano", emoji: "🌊", hint: "Lago + Agua" },
@@ -26,36 +26,81 @@ export const levels = [
     { id: 25, target: "Vidrio", emoji: "🥃", hint: "Arena + Fuego" },
     { id: 26, target: "Reloj", emoji: "🕰️", hint: "Arena + Vidrio = Reloj de arena..." },
     { id: 27, target: "Tiempo", emoji: "⏳", hint: "Reloj + ..." },
-    { id: 28, target: "Sol", emoji: "☀️", hint: "Fuego + Planeta/Cielo" },
+    { id: 28, target: "Sol", emoji: "☀️", hint: "Fuego + Cielo" },
     { id: 29, target: "Luna", emoji: "🌙", hint: "Piedra + Cielo" },
     { id: 30, target: "Eclipse", emoji: "🌑", hint: "Sol + Luna" },
-    // Extending to 100 with generic placeholders to reach the goal
-    ...Array.from({ length: 70 }, (_, i) => ({
-        id: 31 + i,
-        target: `Nivel ${31 + i}`,
-        emoji: "🔒",
-        hint: "¡Sigue experimentando!"
-    }))
+    { id: 31, target: "Flor", emoji: "🌸", hint: "Planta + Sol" },
+    { id: 32, target: "Fruta", emoji: "🍎", hint: "Árbol + Sol" },
+    { id: 33, target: "Jardín", emoji: "🏡", hint: "Planta + Planta" },
+    { id: 34, target: "Semilla", emoji: "🌰", hint: "Planta + Tierra" },
+    { id: 35, target: "Pájaro", emoji: "🐦", hint: "Vida + Cielo" },
+    { id: 36, target: "Huevo", emoji: "🥚", hint: "Pájaro + Pájaro" },
+    { id: 37, target: "Pollo", emoji: "🐔", hint: "Huevo + Vida" },
+    { id: 38, target: "Tortilla", emoji: "🍳", hint: "Huevo + Fuego" },
+    { id: 39, target: "Lagarto", emoji: "🦎", hint: "Huevo + Pantano" },
+    { id: 40, target: "Dinosaurio", emoji: "🦖", hint: "Lagarto + Tiempo" },
+    { id: 41, target: "Dragón", emoji: "🐉", hint: "Lagarto + Fuego" },
+    { id: 42, target: "Fénix", emoji: "🦅", hint: "Pájaro + Fuego" },
+    { id: 43, target: "Caniza", emoji: "🌫️", hint: "Fuego + Árbol" },
+    { id: 44, target: "Carbón", emoji: "🪨", hint: "Madera + Fuego" },
+    { id: 45, target: "Diamante", emoji: "💎", hint: "Carbón + Presión/Tiempo" },
+    { id: 46, target: "Anillo", emoji: "💍", hint: "Diamante + Metal" },
+    { id: 47, target: "Boda", emoji: "💒", hint: "Humano + Anillo" },
+    { id: 48, target: "Amor", emoji: "❤️", hint: "Humano + Humano" },
+    { id: 49, target: "Bebé", emoji: "�", hint: "Amor + Humano" },
+    { id: 50, target: "Unicornio", emoji: "🦄", hint: "Caballo + Leyenda" },
+    { id: 51, target: "Caballo", emoji: "🐎", hint: "Bestia + Campo" },
+    { id: 52, target: "Centauro", emoji: "🐎", hint: "Caballo + Humano" },
+    { id: 53, target: "Minotauro", emoji: "🐂", hint: "Humano + Vaca/Toro" },
+    { id: 54, target: "Sirena", emoji: "🧜‍♀️", hint: "Humano + Pez" },
+    { id: 55, target: "Atlántida", emoji: "🏛️", hint: "Ciudad + Océano" },
+    { id: 56, target: "Barco", emoji: "⛵", hint: "Madera + Agua" },
+    { id: 57, target: "Pirata", emoji: "🏴‍☠️", hint: "Barco + Humano" },
+    { id: 58, target: "Tesoro", emoji: "💰", hint: "Pirata + Isla" },
+    { id: 59, target: "Mapa", emoji: "🗺️", hint: "Papel + Tierra" },
+    { id: 60, target: "Brújula", emoji: "🧭", hint: "Metal + Imán" },
+    { id: 61, target: "Coche", emoji: "🚗", hint: "Motor + Metal" },
+    { id: 62, target: "Avión", emoji: "✈️", hint: "Pájaro + Metal" },
+    { id: 63, target: "Cohete", emoji: "🚀", hint: "Avión + Espacio" },
+    { id: 64, target: "Astronauta", emoji: "👨‍🚀", hint: "Humano + Cohete" },
+    { id: 65, target: "Espacio", emoji: "🌌", hint: "Cielo + Estrella" },
+    { id: 66, target: "Estrella", emoji: "⭐", hint: "Sol + Distancia" },
+    { id: 67, target: "Galaxia", emoji: "🌌", hint: "Estrella + Estrella" },
+    { id: 68, target: "Agujero Negro", emoji: "🕳️", hint: "Estrella + Muerte" },
+    { id: 69, target: "Alienígena", emoji: "👽", hint: "Vida + Espacio" },
+    { id: 70, target: "OVNI", emoji: "🛸", hint: "Alienígena + Metal/Avión" },
+    { id: 71, target: "Robot", emoji: "🤖", hint: "Metal + Vida/Computadora" },
+    { id: 72, target: "IA", emoji: "�", hint: "Robot + Computadora" },
+    { id: 73, target: "Cyborg", emoji: "🦾", hint: "Humano + Robot" },
+    { id: 74, target: "Matrix", emoji: "💻", hint: "Computadora + Vida" },
+    { id: 75, target: "Cthulhu", emoji: "🐙", hint: "Dios + Pulpo/Océano" },
+    { id: 76, target: "Dios", emoji: "😇", hint: "Eternidad + Humano" },
+    { id: 77, target: "Diablo", emoji: "😈", hint: "Dios + Mal/Fuego" },
+    { id: 78, target: "Ángel", emoji: "👼", hint: "Humano + Pájaro/Cielo" },
+    { id: 79, target: "Fantasma", emoji: "👻", hint: "Humano + Muerte" },
+    { id: 80, target: "Zombi", emoji: "🧟", hint: "Cadáver + Vida" },
+    { id: 81, target: "Vampiro", emoji: "🧛", hint: "Humano + Sangre" },
+    { id: 82, target: "Hombre Lobo", emoji: "🐺", hint: "Humano + Lobo/Luna" },
+    { id: 83, target: "Hielo", emoji: "🧊", hint: "Agua + Frío" },
+    { id: 84, target: "Nieve", emoji: "❄️", hint: "Lluvia + Frío" },
+    { id: 85, target: "Muñeco de nieve", emoji: "⛄", hint: "Nieve + Humano" },
+    { id: 86, target: "Navidad", emoji: "🎄", hint: "Nieve + Árbol" },
+    { id: 87, target: "Santa", emoji: "🎅", hint: "Humano + Navidad" },
+    { id: 88, target: "Regalo", emoji: "🎁", hint: "Santa + Chimenea" },
+    { id: 89, target: "Música", emoji: "🎵", hint: "Sonido + Arte" },
+    { id: 90, target: "Fiesta", emoji: "🎉", hint: "Música + Gente" },
+    { id: 91, target: "Tarta", emoji: "🎂", hint: "Comida + Fiesta" },
+    { id: 92, target: "Vela", emoji: "🕯️", hint: "Cera + Fuego" },
+    { id: 93, target: "Luz", emoji: "💡", hint: "Electricidad + Vidrio" },
+    { id: 94, target: "Idea", emoji: "💡", hint: "Humano + Luz" },
+    { id: 95, target: "Libro", emoji: "📖", hint: "Papel + Papel" },
+    { id: 96, target: "Escuela", emoji: "🏫", hint: "Casa + Libro" },
+    { id: 97, target: "Universidad", emoji: "🎓", hint: "Escuela + Tiempo" },
+    { id: 98, target: "Ciencia", emoji: "🔬", hint: "Idea + Estudio" },
+    { id: 99, target: "Universo", emoji: "🌌", hint: "Todo + Todo" },
+    { id: 100, target: "Multiverso", emoji: "🎆", hint: "Universo + Universo" }
 ];
 
-// Set specific names for some higher levels to make them interesting
-const specificLevels = {
-    40: { target: "Dinosaurio", emoji: "🦖" },
-    50: { target: "Unicornio", emoji: "🦄" },
-    60: { target: "Dragón", emoji: "🐉" },
-    75: { target: "Cthulhu", emoji: "🐙" },
-    90: { target: "Universo", emoji: "🌌" },
-    100: { target: "Multiverso", emoji: "🎆" }
-};
-
-levels.forEach(l => {
-    if (specificLevels[l.id]) {
-        l.target = specificLevels[l.id].target;
-        l.emoji = specificLevels[l.id].emoji;
-    }
-});
-
-// Simplified daily words (common objects, animals, weather)
 export const dailyWords = [
     "Perro", "Gato", "Pájaro", "Flor", "Nube", "Río", "Montaña", "Coche", "Libro", "Música", "Frío", "Calor", "Pan", "Fruta"
 ];
