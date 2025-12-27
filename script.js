@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebas
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { levels, getDailyChallenge } from "./levels.js";
+import { recipes, emojiMap, startingElements } from "./recipes.js";
 
 // --- Configuration ---
 const firebaseConfig = {
@@ -23,7 +24,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // --- Data ---
-const startingElements = ["Agua", "Fuego", "Tierra", "Viento"];
+// const startingElements defined in recipes.js
 let inventory = new Set([...startingElements]);
 let workspaceElements = [];
 let isDragging = false;
@@ -43,131 +44,9 @@ const LEVELS_PER_PAGE = 20;
 // Recipes Cache
 
 // Recipes Cache
-const recipes = {
-    "Agua+Fuego": "Vapor",
-    "Fuego+Agua": "Vapor",
-    "Agua+Tierra": "Barro",
-    "Tierra+Agua": "Barro",
-    "Fuego+Tierra": "Lava",
-    "Tierra+Fuego": "Lava",
-    "Viento+Tierra": "Polvo",
-    "Tierra+Viento": "Polvo",
-    "Viento+Fuego": "Humo",
-    "Fuego+Viento": "Humo",
-    "Vapor+Viento": "Nube",
-    "Viento+Vapor": "Nube",
-    "Nube+Tierra": "Niebla",
-    "Tierra+Nube": "Niebla",
-    "Agua+Agua": "Lago",
-    "Fuego+Fuego": "Volcán",
-    "Tierra+Tierra": "Montaña",
-    "Viento+Viento": "Tornado",
-    "Lago+Agua": "Océano",
-    "Océano+Agua": "Mar",
-    "Tierra+Océano": "Isla",
-    "Isla+Árbol": "Palmera",
-    "Barro+Fuego": "Ladrillo",
-    "Ladrillo+Ladrillo": "Muro",
-    "Muro+Muro": "Casa",
-    "Casa+Casa": "Pueblo",
-    "Pueblo+Pueblo": "Ciudad",
-    "Tierra+Vida": "Humano",
-    "Humano+Casa": "Familia",
-    "Vapor+Tierra": "Géiser",
-    "Humo+Niebla": "Smog",
-    "Polvo+Fuego": "Pólvora",
-    "Montaña+Agua": "Cascada",
-    "Cascada+Agua": "Río",
-    "Volcán+Agua": "Obsidiana",
-    "Agua+Viento": "Ola",
-    "Ola+Tierra": "Arena",
-    "Arena+Fuego": "Vidrio",
-    "Vidrio+Arena": "Reloj de arena",
-    "Planta+Agua": "Pantano",
-    "Planta+Tierra": "Árbol",
-    "Árbol+Árbol": "Bosque",
-    "Bosque+Vida": "Salvaje",
-    "Vida+Polvo": "Alien",
-    "Planta+Sol": "Flor",
-    "Volcán+Montaña": "Cordillera",
-    "Arena+Arena": "Desierto",
-    "Desierto+Agua": "Oasis",
-    "Nube+Agua": "Lluvia",
-    "Lluvia+Lluvia": "Inundación",
-    "Lluvia+Sol": "Arcoíris",
-    "Fuego+Vapor": "Motor",
-    "Motor+Carbón": "Tren",
-    "Motor+Agua": "Barco de vapor",
-    "Viento+Energía": "Tormenta",
-    "Tormenta+Agua": "Trueno",
-    "Vida+Agua": "Pez",
-    "Vida+Tierra": "Animal",
-    "Animal+Casa": "Mascota",
-};
+// recipes imported from recipes.js
 
-const emojiMap = {
-    "Agua": "💧",
-    "Fuego": "🔥",
-    "Tierra": "🌍",
-    "Viento": "💨",
-    "Vapor": "💨",
-    "Barro": "💩",
-    "Lava": "🌋",
-    "Polvo": "🌫️",
-    "Humo": "🚬",
-    "Lago": "🌊",
-    "Volcán": "🌋",
-    "Montaña": "🏔️",
-    "Tornado": "🌪️",
-    "Océano": "🌊",
-    "Mar": "🌊",
-    "Isla": "🏝️",
-    "Ladrillo": "🧱",
-    "Muro": "🧱",
-    "Casa": "🏠",
-    "Pueblo": "🏘️",
-    "Ciudad": "🏙️",
-    "Humano": "🧑",
-    "Familia": "👨‍👩‍👧",
-    "Géiser": "⛲",
-    "Smog": "🌫️",
-    "Pólvora": "🧨",
-    "Cascada": "🌊",
-    "Río": "🏞️",
-    "Obsidiana": "⬛",
-    "Ola": "🌊",
-    "Arena": "🏖️",
-    "Vidrio": "🥃",
-    "Reloj de arena": "⏳",
-    "Pantano": "🐊",
-    "Árbol": "🌳",
-    "Bosque": "🌲",
-    "Salvaje": "🦁",
-    "Alien": "👽",
-    "Flor": "🌸",
-    "Escritorio": "🖥️",
-    "Palmera": "🌴",
-    "Desierto": "🌵",
-    "Oasis": "🏝️",
-    "Lluvia": "🌧️",
-    "Inundación": "🌊",
-    "Arcoíris": "🌈",
-    "Motor": "⚙️",
-    "Tren": "🚂",
-    "Barco de vapor": "🚢",
-    "Tormenta": "⛈️",
-    "Trueno": "⚡",
-    "Pez": "🐟",
-    "Animal": "🐶",
-    "Mascota": "🐕",
-    "Vida": "🧬",
-    "Sol": "☀️",
-    "Nube": "☁️",
-    "Energía": "⚡",
-    "Carbón": "🪨",
-    "Niebla": "🌫️",
-    "Planta": "🌱"
-};
+// emojiMap imported from recipes.js
 
 // Internal Sound helper
 const sounds = {
